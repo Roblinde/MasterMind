@@ -10,9 +10,21 @@ namespace MasterMind.Web.Hubs
     [HubName("masterMind")]
     public class MasterMindHub : Hub
     {
-        public void BroadcastMessage(string message)
+        public bool ClientGuess(int[] guess)
         {
-            Clients.showMessage(Context.ConnectionId + " says: " + message, Context.ConnectionId);
+            var correct = new int[] { 0, 1, 2, 3 };
+
+            for (int i = 0; i < correct.Length; i++)
+            {
+                if (correct[i] != guess[i])
+                {
+                    Clients.showGuess(guess, Context.ConnectionId);
+                    return false;
+                }
+            }
+
+            Clients.showGuess(guess, Context.ConnectionId);
+            return true;
         }
     }
 }
