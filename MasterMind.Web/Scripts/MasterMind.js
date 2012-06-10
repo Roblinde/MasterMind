@@ -22,7 +22,8 @@ $(function () {
     });
 
     hub.showGuess = function (guess, connectionId) {
-        if (hub.connection.connectionId != connectionId) {
+
+        if ($.connection.hub.id != connectionId) {
             alert('Another player guessed: ' + guess[0] + guess[1] + guess[2] + guess[3]);
         }
     }
