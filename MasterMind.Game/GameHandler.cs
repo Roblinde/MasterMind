@@ -14,6 +14,9 @@ namespace MasterMind.Game
 
         public List<GameColors> GetInitialColors()
         {
+            if (_colors != null && _colors.Count == 4)
+                return _colors;
+
             _random = new Random();
             _colors = new List<GameColors>();
 

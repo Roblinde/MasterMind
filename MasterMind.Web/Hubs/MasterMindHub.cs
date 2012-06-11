@@ -12,11 +12,10 @@ namespace MasterMind.Web.Hubs
     [HubName("masterMind")]
     public class MasterMindHub : Hub
     {
-        private GameHandler _gameHandler;
-
+        private static GameHandler _gameHandler = new GameHandler();
+        
         public MasterMindHub()
         {
-            _gameHandler = new GameHandler();
             _gameHandler.GetInitialColors();
         }
 
@@ -26,7 +25,7 @@ namespace MasterMind.Web.Hubs
             {
                 Clients.showGuess(guess, Context.ConnectionId);
             }
-            return _gameHandler.Guess(guess); ;
+            return _gameHandler.Guess(guess);
         }
     }
 }
