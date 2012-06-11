@@ -3,28 +3,30 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MasterMind.Game;
 using SignalR.Hubs;
 
 namespace MasterMind.Web.Hubs
 {
+
     [HubName("masterMind")]
     public class MasterMindHub : Hub
     {
-        public bool ClientGuess(int[] guess)
+        private GameHandler _gameHandler;
+
+        public MasterMindHub()
         {
-            var correct = new int[] { 0, 1, 2, 3 };
+            _gameHandler = new GameHandler();
+            _gameHandler.GetInitialColors();
+        }
 
-            for (int i = 0; i < correct.Length; i++)
+        public bool ClientGuess(List<GameColors> guess)
+        {
+            if (Clients != null)
             {
-                if (correct[i] != guess[i])
-                {
-                    Clients.showGuess(guess, Context.ConnectionId);
-                    return false;
-                }
+                Clients.showGuess(guess, Context.ConnectionId);
             }
-
-            Clients.showGuess(guess, Context.ConnectionId);
-            return true;
+            return _gameHandler.Guess(guess); ;
         }
     }
 }

@@ -35,12 +35,42 @@ namespace MasterMind.Game.Tests
 
             List<List<GameColors>> colors = new List<List<GameColors>>();
 
-            for (int i = 0; i < 10000; i++)
+            //1000 is a large enough number to reduce the the chance of getting the same color in the first position
+            //beyond probable infinity (1/8)^1000
+            for (int i = 0; i < 1000; i++)
             {
                 colors.Add(gameHandler.GetInitialColors());
             }
 
             Assert.IsTrue(colors.GroupBy(f => f.First()).Count() > 1, "Colors returned by GameHandler does not appear to be random.");
         }
+
+        [TestMethod]
+        public void GameHandlerReturnsTrueForCorrectResult()
+        {
+            GameHandler gameHandler = new GameHandler();
+
+            var correctGuess = gameHandler.GetInitialColors();
+
+            Assert.IsTrue(gameHandler.Guess(correctGuess), "GameHandler evaluates a guess incorrectly");
+        }
+
+        [TestMethod]
+        public void GameHandlerReturnsFalseForIncorrectResult()
+        {
+            GameHandler gameHandler = new GameHandler();
+            
+            var incorrectGuess = gameHandler.GetInitialColors().ToArray();
+
+            if (incorrectGuess.First() == GameColors.Black)
+                incorrectGuess[0] = GameColors.White;
+            else
+                incorrectGuess[0] = GameColors.Black;
+
+            Assert.IsFalse(gameHandler.Guess(incorrectGuess.ToList()), "GameHandler evaluates a guess incorrectly");
+        }
+
+
+
     }
 }
